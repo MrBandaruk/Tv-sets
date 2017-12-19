@@ -1,0 +1,39 @@
+﻿@model List<TvSets.Models.Tvset>
+@{
+    ViewBag.Title = "Tv Table";
+}
+
+@Styles.Render("~/bundles/tvIndex")
+@Scripts.Render("~/content/tvIndex")
+
+<br/>
+
+<table class="table table-hover">
+    <thead style="font-weight: bold">
+        <tr>
+            <td>Id</td>
+            <td>Company</td>
+            <td>Name</td>
+            <td>Size</td>
+            <td>Resolution</td>
+            <td>Year</td>
+            <td>Technology</td>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Company.Name</td>
+            <td>@item.Name</td>
+            <td>@item.Size</td>
+            <td>@item.Resolution</td>
+            <td>@item.Year</td>
+            <td>@item.Technology.Name</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
