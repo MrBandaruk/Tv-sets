@@ -27,12 +27,15 @@ namespace TvSets
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
 
-            //DataTables
+            //index
             bundles.Add(new ScriptBundle("~/bundles/tvIndex").Include(
-                      "~/Scripts/jquery.dataTables.min.js"));
+                      "~/Scripts/jquery.dataTables.min.js",
+                      "~/Scripts/jquery-confirm.js"));
 
             bundles.Add(new StyleBundle("~/content/tvIndex").Include(
-                      "~/Content/jquery.dataTables.min.css"));
+                      "~/Content/jquery.dataTables.min.css",
+                      "~/Content/jquery-confirm.css"));
+
         }
     }
 }

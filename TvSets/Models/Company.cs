@@ -12,6 +12,7 @@ namespace TvSets.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Company")]
         public string Name { get; set; }
 
         //public ICollection<Technology> Technologies { get; set; }

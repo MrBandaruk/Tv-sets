@@ -3,10 +3,13 @@
     ViewBag.Title = "Tv Table";
 }
 
-@Styles.Render("~/bundles/tvIndex")
-@Scripts.Render("~/content/tvIndex")
+<script type="text/javascript" src="~/Scripts/Catalog/Index/main.js"></script>
 
 <br/>
+
+@Html.ActionLink("Create", "Create", "Tv", new { @class = "btn btn-default btn-tvTable" })
+
+<br />
 
 <table class="table table-hover">
     <thead style="font-weight: bold">
@@ -18,6 +21,7 @@
             <td>Resolution</td>
             <td>Year</td>
             <td>Technology</td>
+            <td style="width: 150px"></td>
         </tr>
     </thead>
     <tbody>
@@ -26,11 +30,13 @@
         <tr>
             <td>@item.Id</td>
             <td>@item.Company.Name</td>
-            <td>@item.Name</td>
+            <td>@Html.ActionLink(@item.Name, "View", new { id = item.Id }, null)</td>
             <td>@item.Size</td>
             <td>@item.Resolution</td>
             <td>@item.Year</td>
             <td>@item.Technology.Name</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Tv", new { id = item.Id }, new { @class="btn btn-default btn-tvTable", id = "btnDelete" })
+            @Html.ActionLink("Delete", "Delete", "Tv", new { id = item.Id }, new { @class = "btn btn-danger btn-tvTable" })</td>
         </tr>
     }
     </tbody>
