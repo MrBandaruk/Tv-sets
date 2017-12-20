@@ -27,6 +27,7 @@ namespace TvSets.Controllers
             using (var db = new TvContext())
             {
                 var items = new TvsetViewModel();
+                search = search ?? "";
                 PageInfo pageInfo = new PageInfo
                 {
                     PageSize = 4,
@@ -35,8 +36,7 @@ namespace TvSets.Controllers
                                     x.Company.Name.Contains(search) ||
                                     x.Technology.Name.Contains(search))
                 };
-                items.PageInfo = pageInfo;
-                search = search ?? "";
+                items.PageInfo = pageInfo;               
 
                 switch (sort)
                 {
