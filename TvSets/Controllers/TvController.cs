@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using TvSets.Entity;
@@ -25,61 +26,45 @@ namespace TvSets.Controllers
         {
             using (var db = new TvContext())
             {
-                TvsetViewModel items = new TvsetViewModel();
+                var items = new TvsetViewModel();
                 PageInfo pageInfo = new PageInfo
                 {
                     PageSize = 4,
-                    PageNumber = page ?? 1
+                    PageNumber = page ?? 1,
+                    TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
+                                    x.Company.Name.Contains(search) ||
+                                    x.Technology.Name.Contains(search))
                 };
                 items.PageInfo = pageInfo;
-                
+                search = search ?? "";
 
-
-                if (string.IsNullOrEmpty(search))
+                switch (sort)
                 {
-                    pageInfo.TotalItems = db.Tvsets.Count();
-                    items.News = db.Tvsets.OrderBy(x => x.Id).Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                        .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
-                        .Include(c => c.Company).Include(t => t.Technology).ToList();
-                    ViewBag.Search = "";
+                    case "low":
+                        ViewBag.Sort = "low";
+                        items.News = db.Tvsets.Where(x =>
+                                x.Name.Contains(search) ||
+                                x.Company.Name.Contains(search) ||
+                                x.Technology.Name.Contains(search)).OrderBy(x => x.Price)
+                            .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                            .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                            .Include(c => c.Company).Include(t => t.Technology).ToList();
+                        ViewBag.Search = search;
+                        return View(items);
+
+                    default:
+                        ViewBag.Sort = "high";
+                        items.News = db.Tvsets.Where(x =>
+                                x.Name.Contains(search) ||
+                                x.Company.Name.Contains(search) ||
+                                x.Technology.Name.Contains(search)).OrderByDescending(x => x.Price)
+                            .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                            .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                            .Include(c => c.Company).Include(t => t.Technology).ToList();
+                        ViewBag.Search = search;
+                        return View(items);
                 }
-                else
-                {
-                    pageInfo.TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
-                                                               x.Company.Name.Contains(search) ||
-                                                               x.Technology.Name.Contains(search));
-                    items.News = db.Tvsets.Where(x =>
-                        x.Name.Contains(search) ||
-                        x.Company.Name.Contains(search) ||
-                        x.Technology.Name.Contains(search)).OrderBy(x => x.Id)
-                        .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                        .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
-                        .Include(c => c.Company).Include(t => t.Technology).ToList();
-                    ViewBag.Search = search;
-                }
-
-
-                if (!string.IsNullOrEmpty(sort))
-                {
-                    switch (sort)
-                    {
-                        case "low":
-                            ViewBag.Sort = "high";
-                            items.News = items.News.OrderBy(x => x.Price).ToList();
-                            pageInfo.TotalItems = items.News.Count;
-                            return View(items);
-
-                        case "high":
-                            ViewBag.Sort = "low";
-                            items.News = items.News.OrderByDescending(x => x.Price).ToList();
-                            pageInfo.TotalItems = items.News.Count;
-                            return View(items);
-                    }
-                }
-
-                return View(items);
-
-            } 
+            }
         }
 
         //count how many items get from db

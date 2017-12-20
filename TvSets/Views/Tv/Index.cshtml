@@ -26,7 +26,7 @@
             <td>Resolution</td>
             <td>Year</td>
             <td>Technology</td>
-            <td style="width: 100px">@Html.ActionLink("Price", "Index", new { sort = ViewBag.Sort ?? "low", search = ViewBag.Search })</td>
+            <td style="width: 100px">@Html.ActionLink("Price", "Index", new { sort = ViewBag.Sort == "low" ? "high" : "low", search = ViewBag.Search })</td>
             <td style="width: 150px"></td>
         </tr>
     </thead>
