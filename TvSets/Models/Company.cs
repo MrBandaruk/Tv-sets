@@ -15,8 +15,6 @@ namespace TvSets.Models
         [Display(Name = "Company")]
         public string Name { get; set; }
 
-        //public ICollection<Technology> Technologies { get; set; }
-        public ICollection<Tvset> Tvsets { get; set; }
-         
+        public virtual ICollection<Tvset> Tvsets { get; set; }
     }
 }

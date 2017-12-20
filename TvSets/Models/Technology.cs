@@ -15,7 +15,11 @@ namespace TvSets.Models
         [Display(Name = "Technology")]
         public string Name { get; set; }
 
-        public ICollection<Tvset> Tvsets { get; set; }
-        //public ICollection<Company> Companies { get; set; }
+        public virtual ICollection<Tvset> Tvsets { get; set; }
+
+        public Technology()
+        {
+            Tvsets = new List<Tvset>();
+        }
     }
 }

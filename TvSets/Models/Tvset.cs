@@ -48,7 +48,7 @@ namespace TvSets.Models
 
     public class TvsetViewModel
     {
-        public List<Tvset> News { get; set; }
+        public List<Tvset> Tvsets { get; set; }
         public PageInfo PageInfo { get; set; }
     }
 }
