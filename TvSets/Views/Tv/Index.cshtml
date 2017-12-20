@@ -1,4 +1,6 @@
-﻿@model List<TvSets.Models.Tvset>
+﻿@using TvSets.Helpers
+@using TvSets.Models
+@model TvSets.Models.TvsetViewModel
 @{
     ViewBag.Title = "Tv Table";
 }
@@ -29,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model)
+    @foreach (var item in Model.News)
     {
         <tr>
             <td>@item.Id</td>
@@ -45,6 +47,10 @@
     }
     </tbody>
 </table>
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { search = ViewBag.Search, sort = ViewBag.Sort, page = x }))
+</div>
 
 
 <script type="text/javascript" src="~/Scripts/Catalog/Index/main.js"></script>

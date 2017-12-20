@@ -155,7 +155,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\PaggingHelpers.cs" />
     <Compile Include="Models\Company.cs" />
+    <Compile Include="Models\PageInfo.cs" />
     <Compile Include="Models\Technology.cs" />
     <Compile Include="Models\Tvset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -45,4 +45,10 @@ namespace TvSets.Models
         public Company Company { get; set; }
 
     }
+
+    public class TvsetViewModel
+    {
+        public List<Tvset> News { get; set; }
+        public PageInfo PageInfo { get; set; }
+    }
 }

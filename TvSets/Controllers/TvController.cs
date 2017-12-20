@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -20,23 +21,40 @@ namespace TvSets.Controllers
         Random rnd = new Random();
 
 
-        public ActionResult Index(string search, string sort)
+        public ActionResult Index(string search, string sort, int? page)
         {
             using (var db = new TvContext())
             {
-                List<Tvset> items = new List<Tvset>();
+                TvsetViewModel items = new TvsetViewModel();
+                PageInfo pageInfo = new PageInfo
+                {
+                    PageSize = 4,
+                    PageNumber = page ?? 1
+                };
+                items.PageInfo = pageInfo;
+                
+
 
                 if (string.IsNullOrEmpty(search))
                 {
-                    items = db.Tvsets.Include(c => c.Company).Include(t => t.Technology).ToList();
+                    pageInfo.TotalItems = db.Tvsets.Count();
+                    items.News = db.Tvsets.OrderBy(x => x.Id).Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                        .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                        .Include(c => c.Company).Include(t => t.Technology).ToList();
                     ViewBag.Search = "";
                 }
                 else
                 {
-                    items = db.Tvsets.Where(x =>
+                    pageInfo.TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
+                                                               x.Company.Name.Contains(search) ||
+                                                               x.Technology.Name.Contains(search));
+                    items.News = db.Tvsets.Where(x =>
                         x.Name.Contains(search) ||
                         x.Company.Name.Contains(search) ||
-                        x.Technology.Name.Contains(search)).Include(c => c.Company).Include(t => t.Technology).ToList();
+                        x.Technology.Name.Contains(search)).OrderBy(x => x.Id)
+                        .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                        .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                        .Include(c => c.Company).Include(t => t.Technology).ToList();
                     ViewBag.Search = search;
                 }
 
@@ -47,18 +65,32 @@ namespace TvSets.Controllers
                     {
                         case "low":
                             ViewBag.Sort = "high";
-                            return View(items.OrderBy(x => x.Price).ToList());
+                            items.News = items.News.OrderBy(x => x.Price).ToList();
+                            pageInfo.TotalItems = items.News.Count;
+                            return View(items);
 
                         case "high":
                             ViewBag.Sort = "low";
-                            return View(items.OrderByDescending(x => x.Price).ToList());
+                            items.News = items.News.OrderByDescending(x => x.Price).ToList();
+                            pageInfo.TotalItems = items.News.Count;
+                            return View(items);
                     }
                 }
-
 
                 return View(items);
 
             } 
+        }
+
+        //count how many items get from db
+        private int GetAll(int totalItems, int pageSize, int page)
+        {
+            int total = totalItems - ((page - 1) * pageSize);
+            if (total >= pageSize)
+            {
+                return pageSize;
+            }
+            return total;
         }
 
         public ActionResult Delete(int id)
