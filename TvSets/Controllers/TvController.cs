@@ -32,54 +32,50 @@ namespace TvSets.Controllers
                 {
                     PageSize = 4,
                     PageNumber = page ?? 1,
-                    //TotalItems = 
                 };
                 items.PageInfo = pageInfo;
 
                 if (!string.IsNullOrEmpty(tech))
                 {
                     ViewBag.Tech = tech;
-                    items.Tvsets = db.Technologies.Where(x => x.Name.Contains(tech))
-                                     .Include(p => p.Tvsets.Select(x => x.Company))
-                                     .FirstOrDefault().Tvsets.ToList();
-                    pageInfo.TotalItems = items.Tvsets.Count();
+                    pageInfo.TotalItems = db.Technologies.FirstOrDefault(x => x.Name.Contains(tech)).Tvsets.Count;
                     switch (sort)
                     {
                         case "low":
                             ViewBag.Sort = "low";
-                            items.Tvsets = items.Tvsets.Where(x => x.Name.Contains(search) ||
-                                                                x.Company.Name.Contains(search) ||
-                                                                x.Technology.Name.Contains(search))
-                                .OrderBy(x => x.Price)
-                                .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                                .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
+                            items.Tvsets = db.Technologies.Where(x => x.Name.Contains(tech))
+                                             .Include(p => p.Tvsets.Select(x => x.Company))
+                                             .FirstOrDefault().Tvsets
+                                             .Where(x => x.Name.Contains(search) ||
+                                                         x.Company.Name.Contains(search) ||
+                                                         x.Technology.Name.Contains(search))
+                                             .OrderBy(x => x.Price)
+                                             .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
                             ViewBag.Search = search;
                             return View(items);
 
                         default:
                             ViewBag.Sort = "high";
-                            items.Tvsets = items.Tvsets.Where(x => x.Name.Contains(search) ||
-                                                                x.Company.Name.Contains(search) ||
-                                                                x.Technology.Name.Contains(search))
-                                .OrderByDescending(x => x.Price)
-                                .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                                .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
+                            items.Tvsets = db.Technologies.Where(x => x.Name.Contains(tech))
+                                             .Include(p => p.Tvsets.Select(x => x.Company))
+                                             .FirstOrDefault().Tvsets
+                                             .Where(x => x.Name.Contains(search) ||
+                                                         x.Company.Name.Contains(search) ||
+                                                         x.Technology.Name.Contains(search))
+                                             .OrderByDescending(x => x.Price)
+                                             .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
+                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
                             ViewBag.Search = search;
                             return View(items);
                     }
 
                     
-                    //return View(items);
                 }
-                else
-                {
-                    pageInfo.TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
+
+                pageInfo.TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
                                                                x.Company.Name.Contains(search) ||
                                                                x.Technology.Name.Contains(search));
-                }
-
-                
-
 
                 switch (sort)
                 {
