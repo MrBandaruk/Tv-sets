@@ -8,6 +8,13 @@ namespace TvSets.Models
 {
     public class Technology
     {
+        public Technology() { }
+
+        public Technology(string name)
+        {
+            Name = name;
+        }
+
         [Key]
         public int Id { get; set; }
 
@@ -17,9 +24,5 @@ namespace TvSets.Models
 
         public virtual ICollection<Tvset> Tvsets { get; set; }
 
-        public Technology()
-        {
-            Tvsets = new List<Tvset>();
-        }
     }
 }

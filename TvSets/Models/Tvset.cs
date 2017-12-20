@@ -39,10 +39,10 @@ namespace TvSets.Models
         public string ImageLink { get; set; }
 
         public int? TechnologyId { get; set; }
-        public Technology Technology { get; set; }
+        public virtual Technology Technology { get; set; }
 
         public int? CompanyId { get; set; }
-        public Company Company { get; set; }
+        public virtual Company Company { get; set; }
 
     }
 

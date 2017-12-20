@@ -3,11 +3,6 @@
     padding-bottom: 20px;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -24,7 +19,7 @@ textarea {
 }
 
 .btn-tvTable{
-    margin: 0 3px;
+    
 }
 
 .btn-file input[type=file] {
@@ -62,4 +57,80 @@ textarea {
     margin-top: 8px;
     float: right;
     width: 360px;
+}
+
+.dropdown-inline {
+    display: inline-block;
+}
+
+.dropdown-inline button {
+    display: inline-block;
+}
+
+ul.dropdown-lr {
+    width: 300px;
+}
+
+.dropdown {
+    line-height: 20px;
+}
+
+
+.dropdown:hover {
+    border-bottom: none !important;
+}
+
+.dropdown-toggle:visited {
+    background-color: #383F4B !important;
+}
+
+.tv-column {
+    margin: 30px 0;
+    font-size: 14px;
+    height: 230px;
+}
+
+.admin-buttons {
+    height: 60px;
+    width: 100%;
+}
+
+.tv-name-link {
+    
+}
+
+.tv-price {
+    display: block;
+    font-size: 13px;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    margin: 85px auto 10px;
+    width: 120px;
+    height: 30px;
+    background: #3E8AC4;
+    border: 1px solid #397da6;
+    border-radius: 2px;
+}
+
+.price-col {
+    height: 100%;
+    text-align: center;
+}
+
+
+.img-main {
+    transition: all 0.4s ease;
+    margin: 0 auto;
+    max-width: 350px;
+    max-height: 220px;
+    overflow: hidden;
+}
+
+.img-main:active {
+    transform: scale(0.9);
+}
+
+.img-main:hover {
+    opacity: 0.9;
 }

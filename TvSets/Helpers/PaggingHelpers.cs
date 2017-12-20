@@ -10,6 +10,7 @@ namespace TvSets.Helpers
 {
     public static class PaggingHelpers
     {
+        //хелпер, который создает кнопки с страницами
         public static MvcHtmlString PageLinks(this HtmlHelper html,
             PageInfo pageInfo, Func<int, string> pageUrl)
         {

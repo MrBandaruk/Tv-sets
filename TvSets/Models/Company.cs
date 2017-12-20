@@ -8,6 +8,13 @@ namespace TvSets.Models
 {
     public class Company
     {
+        public Company() { }
+
+        public Company(string name)
+        {
+            Name = name;
+        }
+
         [Key]
         public int Id { get; set; }
 

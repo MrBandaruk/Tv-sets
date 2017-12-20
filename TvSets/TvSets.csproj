@@ -171,6 +171,19 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="img\0b4d79c00ca90bfdbeb80462811d4778.jpg" />
+    <Content Include="img\181725.jpg" />
+    <Content Include="img\1d67603ba92b070ba84003f716c797a0.jpeg" />
+    <Content Include="img\21a207f0a06f15651b6fec174ef77e8e.jpeg" />
+    <Content Include="img\261207325.jpeg" />
+    <Content Include="img\4a4e1aba6ab898d13104e66a573d442b.jpg" />
+    <Content Include="img\68e584333f6c0d76a59779e4489b5116.jpg" />
+    <Content Include="img\970eca584f9e2a7d53321435b3115838.jpeg" />
+    <Content Include="img\ace78163fd25379cbfe3ef1550e4ba78.jpeg" />
+    <Content Include="img\b9b1c80fb5e7f7ac2a49ed67dfad66fc.jpeg" />
+    <Content Include="img\c553ef6ca0dc0ad19ceb90508823d4a2.jpg" />
+    <Content Include="img\c72c1c72b24f26ed6dbe6aa8780837d9.jpeg" />
+    <Content Include="img\fce77ac176b2810ca8ad8ca7a1d4557b.jpeg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -214,7 +227,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

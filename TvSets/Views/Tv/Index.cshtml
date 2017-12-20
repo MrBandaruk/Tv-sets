@@ -26,24 +26,45 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li>@Html.ActionLink("OLED", "Index", new { tech = "OLED", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
-            <li>@Html.ActionLink("LCD", "Index", new { tech = "LCD", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
-            <li>@Html.ActionLink("Plasma", "Index", new { tech = "Plasma", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
-            <li>@Html.ActionLink("Projection", "Index", new { tech = "Projection", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
-            <li>@Html.ActionLink("Kinescope", "Index", new { tech = "Kinescope", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
-            <li>@Html.ActionLink("None", "Index", new { tech = "", search = ViewBag.Search, sort = ViewBag.Sort }, new { @class = "btn btn-default btn-tvTable" })</li>
+            <li>@Html.ActionLink("OLED", "Index", new { tech = "OLED", search = ViewBag.Search, sort = ViewBag.Sort })</li>
+            <li>@Html.ActionLink("LCD", "Index", new { tech = "LCD", search = ViewBag.Search, sort = ViewBag.Sort })</li>
+            <li>@Html.ActionLink("Plasma", "Index", new { tech = "Plasma", search = ViewBag.Search, sort = ViewBag.Sort })</li>
+            <li>@Html.ActionLink("Projection", "Index", new { tech = "Projection", search = ViewBag.Search, sort = ViewBag.Sort })</li>
+            <li>@Html.ActionLink("Kinescope", "Index", new { tech = "Kinescope", search = ViewBag.Search, sort = ViewBag.Sort })</li>
+            <li>@Html.ActionLink("None", "Index", new { tech = "", search = ViewBag.Search, sort = ViewBag.Sort })</li>
         </ul>
 
         @Html.ActionLink("Create", "Create", "Tv", new { @class = "btn btn-default btn-tvTable" })
 
 
     </div>
+    
+    <div class="dropdown dropdown-inline" style="float: right">
+
+        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+            @if (@ViewBag.Sort == null)
+            {
+                <span>High</span>
+            }
+            else
+            {
+                @ViewBag.Sort
+            }
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>@Html.ActionLink("High", "Index", new { tech = ViewBag.Tech, sort = "High", search = ViewBag.Search })</li>
+            <li>@Html.ActionLink("Low", "Index", new {tech = ViewBag.Tech, sort = "Low", search = ViewBag.Search})</li>
+        </ul>
+    </div>
 </div>
 
-<br />
+
+
+
 <br/>
 
-<table class="table table-hover">
+@*<table class="table table-hover">
     <thead style="font-weight: bold">
         <tr>
             <td>Name</td>
@@ -70,7 +91,33 @@
         </tr>
     }
     </tbody>
-</table>
+</table>*@
+
+@foreach (var item in Model.Tvsets)
+{
+    <div class="row tv-column">
+        <div class="col-md-4">
+            <a href="@Url.Action("View", "Tv", new {id = item.Id})">
+                <img src="@item.ImageLink" class="img-responsive img-main" alt="@item.Name"/>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <h3>@Html.ActionLink(@item.Company.Name + " " + @item.Name, "View", new { id = item.Id }, new { @class = "tv-name-link"})</h3>
+            @item.Size" @item.Resolution, @item.Technology.Name, @item.Details
+        </div>
+        <div class="col-md-2 price-col">
+            <div class="tv-price">
+                @item.Price$
+            </div>
+            <div class="form-inline admin-buttons">
+                @Html.ActionLink("Edit", "Edit", "Tv", new {id = item.Id}, new {@class = "btn btn-default btn-tvTable"})
+                <button class="btn btn-danger btn-tvTable" id="btnDelete" onclick="deleteItem(@item.Id)">Delete</button>
+            </div>
+        </div>
+    </div>
+}
+
+<br/>
 
 <div class="btn-group">
     @Html.PageLinks(Model.PageInfo, x => Url.Action("Index", new { tech = ViewBag.Tech, search = ViewBag.Search, sort = ViewBag.Sort, page = x }))

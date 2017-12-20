@@ -22,6 +22,8 @@ namespace TvSets.Controllers
         Random rnd = new Random();
 
 
+        #region Read
+
         public ActionResult Index(string tech, string search, string sort, int? page)
         {
             using (var db = new TvContext())
@@ -38,49 +40,55 @@ namespace TvSets.Controllers
                 if (!string.IsNullOrEmpty(tech))
                 {
                     ViewBag.Tech = tech;
-                    pageInfo.TotalItems = db.Technologies.FirstOrDefault(x => x.Name.Contains(tech)).Tvsets.Count;
+                    pageInfo.TotalItems = db.Technologies.FirstOrDefault(x => x.Name.Contains(tech))
+                                            .Tvsets.Count(x => x.Name.Contains(search) ||
+                                                               x.Company.Name.Contains(search) ||
+                                                               x.Technology.Name.Contains(search));
                     switch (sort)
                     {
-                        case "low":
-                            ViewBag.Sort = "low";
+                        case "Low":
+                            ViewBag.Sort = "Low";
                             items.Tvsets = db.Technologies.Where(x => x.Name.Contains(tech))
                                              .Include(p => p.Tvsets.Select(x => x.Company))
-                                             .FirstOrDefault().Tvsets
+                                             .FirstOrDefault()?.Tvsets
                                              .Where(x => x.Name.Contains(search) ||
                                                          x.Company.Name.Contains(search) ||
                                                          x.Technology.Name.Contains(search))
                                              .OrderBy(x => x.Price)
                                              .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
+                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                                             .ToList();
+
                             ViewBag.Search = search;
                             return View(items);
 
                         default:
-                            ViewBag.Sort = "high";
+                            ViewBag.Sort = "High";
                             items.Tvsets = db.Technologies.Where(x => x.Name.Contains(tech))
                                              .Include(p => p.Tvsets.Select(x => x.Company))
-                                             .FirstOrDefault().Tvsets
+                                             .FirstOrDefault()?.Tvsets
                                              .Where(x => x.Name.Contains(search) ||
                                                          x.Company.Name.Contains(search) ||
                                                          x.Technology.Name.Contains(search))
                                              .OrderByDescending(x => x.Price)
                                              .Skip((pageInfo.PageNumber - 1) * pageInfo.PageSize)
-                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber)).ToList();
+                                             .Take(GetAll(pageInfo.TotalItems, pageInfo.PageSize, pageInfo.PageNumber))
+                                             .ToList();
                             ViewBag.Search = search;
                             return View(items);
                     }
 
-                    
+
                 }
 
                 pageInfo.TotalItems = db.Tvsets.Count(x => x.Name.Contains(search) ||
-                                                               x.Company.Name.Contains(search) ||
-                                                               x.Technology.Name.Contains(search));
+                                                           x.Company.Name.Contains(search) ||
+                                                           x.Technology.Name.Contains(search));
 
                 switch (sort)
                 {
-                    case "low":
-                        ViewBag.Sort = "low";
+                    case "Low":
+                        ViewBag.Sort = "Low";
                         items.Tvsets = db.Tvsets.Where(x => x.Name.Contains(search) ||
                                                             x.Company.Name.Contains(search) ||
                                                             x.Technology.Name.Contains(search))
@@ -92,7 +100,7 @@ namespace TvSets.Controllers
                         return View(items);
 
                     default:
-                        ViewBag.Sort = "high";
+                        ViewBag.Sort = "High";
                         items.Tvsets = db.Tvsets.Where(x => x.Name.Contains(search) ||
                                                             x.Company.Name.Contains(search) ||
                                                             x.Technology.Name.Contains(search))
@@ -106,36 +114,25 @@ namespace TvSets.Controllers
             }
         }
 
-        private int GetAll(int totalItems, int pageSize, int page)
-        {
-            int total = totalItems - ((page - 1) * pageSize);
-            if (total >= pageSize)
-            {
-                return pageSize;
-            }
-            return total;
-        }
 
-        public ActionResult Delete(int id)
+        public ActionResult View(int id)
         {
-            using(var db = new TvContext())
+            using (var db = new TvContext())
             {
-                var item = db.Tvsets.Find(id);
-                if(item != null)
+                var item = db.Tvsets.Include(c => c.Company).Include(t => t.Technology).FirstOrDefault(x => x.Id == id);
+                if (item != null)
                 {
-                    //удаление картинки
-                    if (!string.IsNullOrWhiteSpace(item.ImageLink))
-                    {
-                        var path = "~/img/" + Path.GetFileName(item.ImageLink);
-                        System.IO.File.Delete(HostingEnvironment.MapPath(path));
-                    }
-
-                    db.Tvsets.Remove(item);
-                    db.SaveChanges();
+                    return View(item);
                 }
                 return RedirectToAction("Index");
             }
         }
+
+        #endregion
+
+
+
+        #region Create
 
         [HttpGet]
         public ActionResult Create()
@@ -145,7 +142,7 @@ namespace TvSets.Controllers
                 SelectList technologies = new SelectList(db.Technologies.ToList(), "Id", "Name");
                 ViewBag.Technologies = technologies;
                 return View();
-            }           
+            }
         }
 
         [HttpPost]
@@ -180,37 +177,22 @@ namespace TvSets.Controllers
                 SelectList technologies = new SelectList(db.Technologies.ToList(), "Id", "Name");
                 ViewBag.Technologies = technologies;
                 return View();
-            }             
-        }
-
-        private string GenerateImageLink(HttpPostedFileBase file)
-        {
-            if (file != null && file.ContentLength > 0)
-            {
-                string fileNameHash = Math.Abs(file.FileName.GetHashCode() * rnd.Next(0, 100)) + Path.GetExtension(file.FileName);
-                var serverUrl = "~/img/" + fileNameHash;
-                Regex regex = new Regex(@"^.*\.(jpg|gif|png|bmp|jpeg)$", RegexOptions.IgnoreCase);
-                if (!regex.IsMatch(Path.GetExtension(serverUrl)))
-                {
-                    return null;
-                }
-                file.SaveAs(HostingEnvironment.MapPath(serverUrl));
-
-                //создает ссылку из конфига
-                return ConfigurationManager.AppSettings["siteUrl"] +
-                    VirtualPathUtility.ToAbsolute(serverUrl);
             }
-            return null;
         }
 
+        #endregion
+
+
+
+        #region Update
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            using(var db = new TvContext())
+            using (var db = new TvContext())
             {
                 var item = db.Tvsets.Include(c => c.Company).Include(t => t.Technology).FirstOrDefault(x => x.Id == id);
-                if(item != null)
+                if (item != null)
                 {
                     SelectList technologies = new SelectList(db.Technologies.ToList(), "Id", "Name");
                     ViewBag.Technologies = technologies;
@@ -255,9 +237,9 @@ namespace TvSets.Controllers
                     old.Details = item.Details;
 
                     //удаление старой картинки
-                    if (!string.Equals(old.ImageLink, item.ImageLink))
+                    if (!string.Equals(old.ImageLink, item.ImageLink) && old.ImageLink != null)
                     {
-                        var path = "~/img/" + old.ImageLink;
+                        var path = "~/img/" + Path.GetFileName(old.ImageLink);
                         System.IO.File.Delete(HostingEnvironment.MapPath(path));
                     }
 
@@ -272,19 +254,72 @@ namespace TvSets.Controllers
             }
         }
 
-        public ActionResult View(int id)
+        #endregion
+
+
+
+        #region Delete
+
+        public ActionResult Delete(int id)
         {
-            using(var db = new TvContext())
+            using (var db = new TvContext())
             {
-                var item = db.Tvsets.Include(c => c.Company).Include(t => t.Technology).FirstOrDefault(x => x.Id == id);
-                if(item != null)
+                var item = db.Tvsets.Find(id);
+                if (item != null)
                 {
-                    return View(item);
+                    //удаление картинки
+                    if (!string.IsNullOrWhiteSpace(item.ImageLink))
+                    {
+                        var path = "~/img/" + Path.GetFileName(item.ImageLink);
+                        System.IO.File.Delete(HostingEnvironment.MapPath(path));
+                    }
+
+                    db.Tvsets.Remove(item);
+                    db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
         }
 
+        #endregion
+
+
+
+        #region Helpers
+
+        //создает ссылку из картинки
+        private string GenerateImageLink(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                string fileNameHash = Math.Abs(file.FileName.GetHashCode() * rnd.Next(0, 100)) + Path.GetExtension(file.FileName);
+                var serverUrl = "~/img/" + fileNameHash;
+                Regex regex = new Regex(@"^.*\.(jpg|gif|png|bmp|jpeg)$", RegexOptions.IgnoreCase);
+                if (!regex.IsMatch(Path.GetExtension(serverUrl)))
+                {
+                    return null;
+                }
+                file.SaveAs(HostingEnvironment.MapPath(serverUrl));
+
+                //берет ссылку из конфига
+                return ConfigurationManager.AppSettings["siteUrl"] +
+                       VirtualPathUtility.ToAbsolute(serverUrl);
+            }
+            return null;
+        }
+
+        //считает количество элементов для выборки
+        private int GetAll(int totalItems, int pageSize, int page)
+        {
+            int total = totalItems - ((page - 1) * pageSize);
+            if (total >= pageSize)
+            {
+                return pageSize;
+            }
+            return total;
+        }
+
+        #endregion
 
     }
 }
