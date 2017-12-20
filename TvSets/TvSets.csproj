@@ -157,7 +157,6 @@
     </Compile>
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\Technology.cs" />
-    <Compile Include="Models\TvImage.cs" />
     <Compile Include="Models\Tvset.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -182,6 +181,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-confirm.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.redirect.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -207,9 +207,12 @@
     <Content Include="Views\Tv\Create.cshtml" />
     <Content Include="Views\Tv\Edit.cshtml" />
     <Content Include="Views\Tv\View.cshtml" />
+    <Content Include="Views\Shared\_TvLayout.cshtml" />
+    <Content Include="Views\Tv\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

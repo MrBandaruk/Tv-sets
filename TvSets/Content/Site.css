@@ -25,5 +25,41 @@ textarea {
 
 .btn-tvTable{
     margin: 0 3px;
+}
 
+.btn-file input[type=file] {
+    
+    width: 50px;
+    height: 0px;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.btn-file{
+    position: relative;
+    overflow: hidden;
+    margin-left: 210px;
+}
+
+.img-view {
+    margin: 20px auto;
+    max-width: 600px;
+    max-height: 600px;
+    overflow: hidden;
+}
+
+.li-search {
+    margin-top: 8px;
+    float: right;
+    width: 360px;
 }

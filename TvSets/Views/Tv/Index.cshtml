@@ -3,24 +3,28 @@
     ViewBag.Title = "Tv Table";
 }
 
-<script type="text/javascript" src="~/Scripts/Catalog/Index/main.js"></script>
+@Scripts.Render("~/bundles/tvIndex")
+@Styles.Render("~/content/tvIndex")
+@*@Styles.Render("~/Content/confirmCss")
+@Scripts.Render("~/bundles/jqueryconf")*@
 
 <br/>
 
 @Html.ActionLink("Create", "Create", "Tv", new { @class = "btn btn-default btn-tvTable" })
 
 <br />
+<br/>
 
 <table class="table table-hover">
     <thead style="font-weight: bold">
         <tr>
-            <td>Id</td>
-            <td>Company</td>
+            <td style="width: 20px">Id</td>
             <td>Name</td>
             <td>Size</td>
             <td>Resolution</td>
             <td>Year</td>
             <td>Technology</td>
+            <td style="width: 100px">@Html.ActionLink("Price", "Index", new { sort = ViewBag.Sort ?? "low", search = ViewBag.Search })</td>
             <td style="width: 150px"></td>
         </tr>
     </thead>
@@ -29,17 +33,19 @@
     {
         <tr>
             <td>@item.Id</td>
-            <td>@item.Company.Name</td>
-            <td>@Html.ActionLink(@item.Name, "View", new { id = item.Id }, null)</td>
-            <td>@item.Size</td>
+            <td>@Html.ActionLink(@item.Company.Name + " " + @item.Name, "View", new { id = item.Id }, null)</td>
+            <td>@item.Size"</td>
             <td>@item.Resolution</td>
             <td>@item.Year</td>
             <td>@item.Technology.Name</td>
-            <td>@Html.ActionLink("Edit", "Edit", "Tv", new { id = item.Id }, new { @class="btn btn-default btn-tvTable", id = "btnDelete" })
-            @Html.ActionLink("Delete", "Delete", "Tv", new { id = item.Id }, new { @class = "btn btn-danger btn-tvTable" })</td>
+            <td>@item.Price$</td>
+            <td>@Html.ActionLink("Edit", "Edit", "Tv", new { id = item.Id }, new { @class="btn btn-default btn-tvTable" })
+            <button class="btn btn-danger btn-tvTable" id="btnDelete" onclick="deleteItem(@item.Id)">Delete</button></td>
         </tr>
     }
     </tbody>
 </table>
 
 
+<script type="text/javascript" src="~/Scripts/Catalog/Index/main.js"></script>
+  

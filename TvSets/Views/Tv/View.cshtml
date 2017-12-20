@@ -7,15 +7,14 @@
 <h2>View</h2>
 
 <div>
-    <h4>Tvset</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Company.Name)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Company.Name)
+            @Html.DisplayFor(model => model.Company.Name) @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
@@ -24,14 +23,6 @@
 
         <dd>
             @Html.DisplayFor(model => model.Technology.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
@@ -47,7 +38,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Size)
+            @Html.DisplayFor(model => model.Size)"
         </dd>
 
         <dt>
@@ -57,6 +48,11 @@
         <dd>
             @Html.DisplayFor(model => model.Resolution)
         </dd>
+        
+        @if (!string.IsNullOrWhiteSpace(Model.ImageLink))
+        {
+            <img src="@Model.ImageLink" class="img-responsive img-view" alt="@Model.Name" />
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.Details)
@@ -65,10 +61,19 @@
         <dd>
             @Html.DisplayFor(model => model.Details)
         </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)$
+        </dd>
+
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class="btn btn-default"} ) 
+    @Html.ActionLink("Back to List", "Index", null, new { @class="btn btn-default"})
 </p>

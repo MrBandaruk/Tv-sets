@@ -14,6 +14,5 @@ namespace TvSets.Entity
         public DbSet<Company> Companies { get; set; }
         public DbSet<Technology> Technologies { get; set; }
         public DbSet<Tvset> Tvsets { get; set; }
-        public DbSet<TvImage> TvImages { get; set; }
     }
 }
