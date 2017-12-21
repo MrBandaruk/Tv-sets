@@ -200,13 +200,18 @@ namespace TvSets.Controllers
                     old.Details = item.Details;
 
                     //удаление старой картинки
-                    if (!string.Equals(old.ImageLink, item.ImageLink) && old.ImageLink != null)
+                    if (!string.Equals(old.ImageLink, item.ImageLink) && item.ImageLink != null)
                     {
-                        var path = "~/img/" + Path.GetFileName(old.ImageLink);
-                        System.IO.File.Delete(HostingEnvironment.MapPath(path));
+                        if (old.ImageLink != null)
+                        {
+                            var path = "~/img/" + Path.GetFileName(old.ImageLink);
+                            System.IO.File.Delete(HostingEnvironment.MapPath(path));
+                        }
+                        old.ImageLink = item.ImageLink;
                     }
 
-                    old.ImageLink = item.ImageLink;
+
+
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }

@@ -24,7 +24,7 @@ namespace TvSets.Helpers
 
                 if (i == pageInfo.PageNumber)
                 {
-                    tag.AddCssClass("btn-default");
+                    tag.AddCssClass("btn-info");
                 }
                 tag.AddCssClass("btn btn-default");
                 result.Append(tag.ToString());
