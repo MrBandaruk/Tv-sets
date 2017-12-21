@@ -20,7 +20,7 @@ function deleteItem(id) {
                 keys: ['enter'],
                 action: function () {
                     $.ajax({
-                        url: 'Tv/Delete/' + id,
+                        url: 'http://localhost:50567/Tv/Delete/' + id,
                         success: function () {
                             location.reload();
                         }
