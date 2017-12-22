@@ -134,7 +134,7 @@ namespace TvSets.Controllers
                 {
                     db.Tvsets.Add(item);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("View", new { id = item.Id });
                 }
 
                 SelectList technologies = new SelectList(db.Technologies.ToList(), "Id", "Name");
@@ -210,10 +210,8 @@ namespace TvSets.Controllers
                         old.ImageLink = item.ImageLink;
                     }
 
-
-
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("View", new { id = item.Id });
                 }
 
                 SelectList technologies = new SelectList(db.Technologies.ToList(), "Id", "Name");
